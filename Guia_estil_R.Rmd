@@ -1,0 +1,156 @@
+---
+title: "R Guia d'estil"
+output: html_document
+---
+
+# Resum 
+
+* Noms d'arxiu: Acabats en .R
+* Identificadors: nom.variable, NomFuncio, kNomConstant
+* Longitud de línea: 80 caracters
+* Indentació: 4 espais. Sense tabuladors. Quan hi ha trencament de línia dins d'un parentissin s'alinia amb el principi del parentessis.
+* Claus: En línia pròpia sota la primera lletra de la commanda
+* Assignació: Usar <- i no =
+* Ordre i blocs:
++ Comentaris: Tots els comentaris comencen per # seguit d'un espai. Els comentaries en linea necesiten dos espais davant de #
++ Definiicó de funcions i crides.
++ Documentació de la funció.
++ Exemple de la funció.
+
+# Regles per R
+* Funcions: Els errors han d'aixecar-se amb stop()
+
+# Nomenclatures
+
+## Noms d'arxiu
+
+Noms d'arxiu acabats en .R, i per descomptat, significatius.
+
+__CORRECTE__ prediccio_guanys_publicitat.R  
+__INCORRECTE__ foo.R
+
+## Identificadors
+
+No usar subratllats ( _ ) or guions ( - ) als identificadors. S'ha de donar nom als identificadors seguint les següents convencions.
+
+* Els noms de _variables_ són en minúscules i les paraules separades per punts. ( nom.variable )
+* Els noms de les _funcions_ segueixen el CaMel style. ( NomFuncio )
+* Les _constants_ s'anomenen com les funcions però amb una k davant ( kNomConstant )
+
+
+## Espaiats
+
+Quan hi ha trencament de línia dins d'un parentessis, s'alinia la següent línia amb el primer caràcter de dins del parèntesis.
+
+Posar espais al voltant dels operadors binaris (=, +, -, <-, etc.).
+Posar sempre un espai després de la coma, mai abans.
+Posar un espai abans d'obrir un parentessis, excepte en la crida a una funció.
+
+# Organització. 
+
+* Comentari sobre el copyright
+* Comentari sobre l'autor
+* Comentari de descripció sobre l'arxiu, inclou funció del programa, entrades i sortides.
+* Sentències, source() i library()
+* Definició de funcions
+* Si es necessari codi d'execució
+
+Els unit test han d'anar en un arxiu separat anomenat nomoriginal_test.R
+
+# Guia de comentaris
+
+Les línies de comentari ha de començar amb # i un espai.
+
+En poden posar comentaris curts, en linia, amb dos espais, #, i després un espai.
+
+# Definició i crida de funcions
+
+La definició de les funcions ha de llistar primer arguments sense valors per defecte, i després aquells amb valors per defecte.
+
+Tant en la definició com en la crida de funcions es permeten diversos arguments per línia, es pot trencar la línia després d'una asignació.
+
+__CORRECTE:__ 
+```
+PredictCTR <- function(query, property, num.days,
+                       show.plot = TRUE)
+```
+__INCORRECTE:__
+```
+PredictCTR <- function(query, property, num.days, show.plot =
+                       TRUE)
+```
+
+# Documentació de la funció
+
+Les funcions han de tenir una secció de comentari immediatament després de la seva definició. Aquests comentaris han de ser una línia de descripció de la funció; una llista d'arguments, indicats amb _Args:_ amb una descripció de cadascun ( incloent el tipus de dada ) i una descripció del valor de retorn, indentificat amb _Retorn:_
+Els comentaris ha de ser suficientment descriptius per tl que un usuari pugui per servir la funció sense llegir el codi.
+
+# Funció d'exemple
+
+````
+CalculaMostraCovarianca <- function(x, y, verbose = TRUE) {
+  # Calcula una mostra de covariança entre 2 vectors.
+  #
+  # Args:
+  #   x: Un vector del qual calcularem la mostra de covariança.
+  #   y: Un vector. x i y han de tenir la mateixa mida i ha de ser major que 1 sense valors absents.
+  #   verbose: Si TRUE, imprimeix la covariança mostra. Sino, no. per Defecte és TRUE.
+  #
+  # Retorn:
+  #   La mostra de covariança entre x i y 
+  n <- length(x)
+  # Gestió d'errors
+  if (n <= 1 || n != length(y)) 
+  {
+    stop("Els arguments x i y tenen diferents longituds: ",
+         length(x), " i ", length(y), ".")
+  }
+  if (TRUE %in% is.na(x) || TRUE %in% is.na(y)) 
+  {
+    stop(" Els arguments x i y no han de tenir valors absents.")
+  }
+  covariance <- var(x, y)
+  if (verbose)
+    cat("Covariança = ", round(covariance, 4), ".\n", sep = "")
+  return(covariance)
+}
+
+````
+
+# Exemple documentació roxygen
+
+````
+#' Sum of vector elements.
+#'
+#' \code{sum} returns the sum of all the values present in its arguments.
+#'
+#' This is a generic function: methods can be defined for it directly
+#' or via the \code{\link{Summary}} group generic. For this to work properly,
+#' the arguments \code{...} should be unnamed, and dispatch is on the
+#' first argument.
+#'
+#' @param ... Numeric, complex, or logical vectors.
+#' @param na.rm A logical scalar. Should missing values (including NaN)
+#'   be removed?
+#' @return If all inputs are integer and logical, then the output
+#'   will be an integer. If integer overflow
+#'   \url{http://en.wikipedia.org/wiki/Integer_overflow} occurs, the output
+#'   will be NA with a warning. Otherwise it will be a length-one numeric or
+#'   complex vector.
+#'
+#'   Zero-length vectors have sum 0 by definition. See
+#'   \url{http://en.wikipedia.org/wiki/Empty_sum} for more details.
+#' @examples
+#' sum(1:10)
+#' sum(1:5, 6:10)
+#' sum(F, F, F, T, T)
+#'
+#' sum(.Machine$integer.max, 1L)
+#' sum(.Machine$integer.max, 1)
+#'
+#' \dontrun{
+#' sum("a")
+#' }
+sum <- function(..., na.rm = TRUE) {}
+
+````
