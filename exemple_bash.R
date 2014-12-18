@@ -1,5 +1,19 @@
 #!/usr/bin/env Rscript
+#### Passing Command-Line Arguments to R Programs
 
+message ("Imprimim els paràmetres passats al script")
+######################
+args <- commandArgs( trailingOnly = TRUE)
+print (paste("Argument1:", args[1]))
+print (paste("Argument2:", args[2]))
+
+#rnorm(n=as.numeric(args[1]), mean=as.numeric(args[2])
+
+
+
+#myarg <- commandArgs()
+#print(iris[1:myarg, ])
+######################
 
 
 cat("Hello\n")
